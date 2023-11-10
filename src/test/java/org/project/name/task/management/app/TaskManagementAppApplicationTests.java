@@ -3,7 +3,7 @@ package org.project.name.task.management.app;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+@SpringBootTest(classes = TaskManagementAppApplicationTests.class)
 class TaskManagementAppApplicationTests {
 
     @Test
