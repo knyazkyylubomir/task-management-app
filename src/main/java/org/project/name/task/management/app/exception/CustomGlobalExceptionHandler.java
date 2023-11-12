@@ -60,6 +60,24 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         return new ResponseEntity<>(body, status);
     }
 
+    @ExceptionHandler(value = RoleException.class)
+    protected ResponseEntity<Object> handleRoleException(RoleException ex) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        List<String> error = List.of(ex.getMessage());
+        ErrorRespondBody body = errorRespondBodyMapper.createErrorBody(
+                LocalDateTime.now(), status, error);
+        return new ResponseEntity<>(body, status);
+    }
+
+    @ExceptionHandler(value = UpdateException.class)
+    protected ResponseEntity<Object> handleUpdateException(UpdateException ex) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        List<String> errors = List.of(ex.getMessage());
+        ErrorRespondBody body = errorRespondBodyMapper.createErrorBody(
+                LocalDateTime.now(), status, errors);
+        return new ResponseEntity<>(body, status);
+    }
+
     private String getErrorMessage(ObjectError e) {
         if (e instanceof FieldError) {
             String field = ((FieldError) e).getField();
