@@ -1,5 +1,7 @@
 package org.project.name.task.management.app.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "User API", description = "Endpoints for managing a user profile")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/users")
@@ -31,6 +34,10 @@ public class UserController {
 
     @PutMapping("/{id}/role")
     @PreAuthorize(value = "hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPER_ADMIN')")
+    @Operation(
+            summary = "Update a role of a user",
+            description = "This endpoint updates a role of a user by their identifier"
+    )
     public UpdateRoleResponseDto updateUserRole(
             @PathVariable @Min(1) Long id,
             @RequestBody @Valid UpdateRoleRequest request,
@@ -40,11 +47,19 @@ public class UserController {
     }
 
     @GetMapping("/me")
+    @Operation(
+            summary = "Get a user's profile",
+            description = "This endpoints gets a user's profile details"
+    )
     public UserInfoResponseDto getMyProfile(Authentication authentication) {
         return userService.getMyProfile(authentication.getName());
     }
 
     @PatchMapping("/me")
+    @Operation(
+            summary = "Update a user's profile details",
+            description = "This endpoints updates a user's profile details"
+    )
     public UserInfoResponseDto updateMyProfile(
             @RequestBody @Valid UpdateUserInfoRequest request,
             Authentication authentication

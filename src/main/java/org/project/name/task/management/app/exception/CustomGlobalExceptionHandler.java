@@ -78,6 +78,24 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         return new ResponseEntity<>(body, status);
     }
 
+    @ExceptionHandler(value = DateException.class)
+    protected ResponseEntity<Object> handleDateException(DateException ex) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        List<String> errors = List.of(ex.getMessage());
+        ErrorRespondBody body = errorRespondBodyMapper.createErrorBody(
+                LocalDateTime.now(), status, errors);
+        return new ResponseEntity<>(body, status);
+    }
+
+    @ExceptionHandler(value = DuplicateNameException.class)
+    protected ResponseEntity<Object> handleDuplicateNameException(DuplicateNameException ex) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        List<String> errors = List.of(ex.getMessage());
+        ErrorRespondBody body = errorRespondBodyMapper.createErrorBody(
+                LocalDateTime.now(), status, errors);
+        return new ResponseEntity<>(body, status);
+    }
+
     private String getErrorMessage(ObjectError e) {
         if (e instanceof FieldError) {
             String field = ((FieldError) e).getField();
