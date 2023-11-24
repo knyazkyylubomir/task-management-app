@@ -13,7 +13,7 @@ import org.project.name.task.management.app.validation.FieldMatch;
                 fieldMatch = "repeatPassword"
         )
 })
-public class UserRegistrationRequest {
+public class UserRegistrationRequestDto {
     @NotBlank
     @Size(min = 1, max = 64)
     private String username;

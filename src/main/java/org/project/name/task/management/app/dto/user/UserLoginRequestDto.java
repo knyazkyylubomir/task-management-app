@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class UserLoginRequest {
+public class UserLoginRequestDto {
     @NotEmpty
     @Size(min = 1, max = 64)
     private String username;
