@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.project.name.task.management.app.dto.user.UpdateUserRequest;
+import org.project.name.task.management.app.dto.user.UpdateUserRequestDto;
 import org.project.name.task.management.app.dto.user.UserResponseDto;
 import org.project.name.task.management.app.service.user.UserService;
 import org.springframework.security.core.Authentication;
@@ -38,7 +38,7 @@ public class UserController {
             description = "This endpoints updates a user's profile details"
     )
     public UserResponseDto updateMyProfile(
-            @RequestBody @Valid UpdateUserRequest request,
+            @RequestBody @Valid UpdateUserRequestDto request,
             Authentication authentication
     ) {
         return userService.updateMyProfile(request, authentication.getName());

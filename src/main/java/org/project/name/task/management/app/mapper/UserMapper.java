@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.project.name.task.management.app.config.MapperConfig;
-import org.project.name.task.management.app.dto.user.UpdateUserRequest;
+import org.project.name.task.management.app.dto.user.UpdateUserRequestDto;
 import org.project.name.task.management.app.dto.user.UserRegistrationRequestDto;
 import org.project.name.task.management.app.dto.user.UserResponseDto;
 import org.project.name.task.management.app.model.User;
@@ -16,5 +16,5 @@ public interface UserMapper {
 
     UserResponseDto toDto(User user);
 
-    User mergeEntities(@MappingTarget User user, UpdateUserRequest request);
+    User mergeEntities(@MappingTarget User user, UpdateUserRequestDto request);
 }

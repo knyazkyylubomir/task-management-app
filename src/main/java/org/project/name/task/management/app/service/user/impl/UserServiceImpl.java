@@ -1,7 +1,7 @@
 package org.project.name.task.management.app.service.user.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.project.name.task.management.app.dto.user.UpdateUserRequest;
+import org.project.name.task.management.app.dto.user.UpdateUserRequestDto;
 import org.project.name.task.management.app.dto.user.UserRegistrationRequestDto;
 import org.project.name.task.management.app.dto.user.UserResponseDto;
 import org.project.name.task.management.app.exception.EntityNotFoundException;
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDto updateMyProfile(UpdateUserRequest request, String username) {
+    public UserResponseDto updateMyProfile(UpdateUserRequestDto request, String username) {
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new EntityNotFoundException("There is no user by username: " + username)
         );

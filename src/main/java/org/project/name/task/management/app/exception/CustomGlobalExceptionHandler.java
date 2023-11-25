@@ -1,5 +1,6 @@
 package org.project.name.task.management.app.exception;
 
+import jakarta.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -54,18 +55,38 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     @ExceptionHandler(value = EntityNotFoundException.class)
     protected ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex) {
         HttpStatus status = HttpStatus.NOT_FOUND;
-        List<String> error = List.of(ex.getMessage());
+        List<String> errors = List.of(ex.getMessage());
         ErrorRespondBody body = errorRespondBodyMapper.createErrorBody(
-                LocalDateTime.now(), status, error);
+                LocalDateTime.now(), status, errors);
         return new ResponseEntity<>(body, status);
     }
 
     @ExceptionHandler(value = UpdateException.class)
     protected ResponseEntity<Object> handleEntityUpdateException(UpdateException ex) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
-        List<String> error = List.of(ex.getMessage());
+        List<String> errors = List.of(ex.getMessage());
         ErrorRespondBody body = errorRespondBodyMapper.createErrorBody(
-                LocalDateTime.now(), status, error);
+                LocalDateTime.now(), status, errors);
+        return new ResponseEntity<>(body, status);
+    }
+
+    @ExceptionHandler(value = DuplicateNameException.class)
+    protected ResponseEntity<Object> handleEntityDuplicateNameException(DuplicateNameException ex) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        List<String> errors = List.of(ex.getMessage());
+        ErrorRespondBody body = errorRespondBodyMapper.createErrorBody(
+                LocalDateTime.now(), status, errors);
+        return new ResponseEntity<>(body, status);
+    }
+
+    @ExceptionHandler(value = ConstraintViolationException.class)
+    protected ResponseEntity<Object> handleEntityDuplicateNameException(
+            ConstraintViolationException ex
+    ) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        List<String> errors = List.of("ID must be greater than or equal to 1");
+        ErrorRespondBody body = errorRespondBodyMapper.createErrorBody(
+                LocalDateTime.now(), status, errors);
         return new ResponseEntity<>(body, status);
     }
 
