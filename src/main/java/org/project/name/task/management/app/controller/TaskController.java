@@ -1,5 +1,6 @@
 package org.project.name.task.management.app.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -32,6 +33,7 @@ public class TaskController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Create a task", description = "This endpoint creates a new task")
     public TaskResponseDto createTask(
             @RequestBody @Valid TaskRequestDto requestDto,
             Authentication authentication
@@ -40,6 +42,10 @@ public class TaskController {
     }
 
     @GetMapping("/project/{id}")
+    @Operation(
+            summary = "Retrieve all tasks",
+            description = "This endpoint retrieves all assignee or owner tasks for project"
+    )
     public List<TaskResponseDto> getTasks(
             @PathVariable @Min(1) Long id,
             Authentication authentication
@@ -48,7 +54,10 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
-    public TaskResponseDto getTask(
+    @Operation(
+            summary = "Retrieve a task",
+            description = "This endpoint retrieves a task by identifier"
+    )public TaskResponseDto getTask(
             @PathVariable @Min(1) Long id,
             Authentication authentication
     ) {
@@ -56,6 +65,10 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
+    @Operation(
+            summary = "Update a task",
+            description = "This endpoint updates a task by identifier"
+    )
     public TaskResponseDto updateTask(
             @PathVariable @Min(1) Long id,
             @RequestBody @Valid UpdateTaskRequestDto requestDto,
@@ -66,6 +79,10 @@ public class TaskController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(
+            summary = "Delete a task",
+            description = "This endpoint deletes a task by identifier"
+    )
     public void deleteTask(@PathVariable @Min(1) Long id, Authentication authentication) {
         taskService.deleteTask(id, authentication.getName());
     }
