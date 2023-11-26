@@ -39,17 +39,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto getMyProfile(String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new EntityNotFoundException("There is no user by username: " + username)
-        );
+        User user = getUser(username);
         return userMapper.toDto(user);
     }
 
     @Override
     public UserResponseDto updateMyProfile(UpdateUserRequestDto request, String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new EntityNotFoundException("There is no user by username: " + username)
-        );
+        User user = getUser(username);
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
             throw new UpdateException("User with given username already exists");
         }
@@ -58,5 +54,11 @@ public class UserServiceImpl implements UserService {
         }
         User mergedEntities = userMapper.mergeEntities(user, request);
         return userMapper.toDto(userRepository.save(mergedEntities));
+    }
+
+    private User getUser(String username) {
+        return userRepository.findByUsername(username).orElseThrow(
+                () -> new EntityNotFoundException("There is no user by username: " + username)
+        );
     }
 }

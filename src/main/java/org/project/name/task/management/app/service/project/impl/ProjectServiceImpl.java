@@ -26,15 +26,8 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectResponseDto createProject(ProjectRequestDto requestDto, String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new EntityNotFoundException("There is no user by username: " + username)
-        );
-        for (Project project : projectRepository.findAllByUser(user)) {
-            String projectName = project.getName().toLowerCase();
-            if (projectName.equals(requestDto.getName().toLowerCase())) {
-                throw new DuplicateNameException("The project with this name already exist");
-            }
-        }
+        User user = findUser(username);
+        doesProjectNameDuplicate(user, requestDto.getName());
         Project.Status status = Project.Status.INITIATED;
         Project project = projectMapper.createEntity(requestDto, status, user);
         return projectMapper.toDto(projectRepository.save(project));
@@ -42,9 +35,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<ProjectResponseDto> getProjects(String username, Pageable pageable) {
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new EntityNotFoundException("There is no user by username: " + username)
-        );
+        User user = findUser(username);
         return projectRepository.findAllByUser(user, pageable).stream()
                 .map(projectMapper::toDto)
                 .toList();
@@ -52,14 +43,8 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectResponseDto getProject(Long id, String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new EntityNotFoundException("There is no user by username: " + username)
-        );
-        Project project = projectRepository.findByIdAndUser(id, user).orElseThrow(
-                () -> new EntityNotFoundException(
-                        "There is no project for user " + username + " by id: " + id
-                )
-        );
+        User user = findUser(username);
+        Project project = findProject(id, user, username);
         return projectMapper.toDto(project);
     }
 
@@ -69,43 +54,62 @@ public class ProjectServiceImpl implements ProjectService {
             UpdateProjectRequestDto requestDto,
             String username
     ) {
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new EntityNotFoundException("There is no user by username: " + username)
-        );
-        for (Project project : projectRepository.findAllByUser(user)) {
-            String projectName = project.getName().toLowerCase();
-            if (projectName.equals(requestDto.getName().toLowerCase())) {
-                if (!project.getId().equals(id)) {
-                    throw new DuplicateNameException("The project with this name already exist");
-                }
-                break;
-            }
-        }
-        Project project = projectRepository.findByIdAndUser(id, user).orElseThrow(
-                () -> new EntityNotFoundException(
-                        "There is no project for user " + username + " by id: " + id
-                )
-        );
-        Arrays.stream(Project.Status.values())
-                .filter(status -> status.name().equals(requestDto.getStatus()))
-                .findFirst()
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "There is no such a status. Check correctness of a written word"
-                ));
+        User user = findUser(username);
+        doesProjectNameRepeated(user, requestDto.getName(), id);
+        Project project = findProject(id, user, username);
+        doesStatusExist(requestDto.getStatus());
         Project mergedEntities = projectMapper.mergeEntities(project, requestDto);
         return projectMapper.toDto(projectRepository.save(mergedEntities));
     }
 
     @Override
     public void deleteProject(Long id, String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(
+        User user = findUser(username);
+        Project project = findProject(id, user, username);
+        projectRepository.delete(project);
+    }
+
+    private User findUser(String username) {
+        return userRepository.findByUsername(username).orElseThrow(
                 () -> new EntityNotFoundException("There is no user by username: " + username)
         );
-        Project project = projectRepository.findByIdAndUser(id, user).orElseThrow(
+    }
+
+    private Project findProject(Long id, User user, String username) {
+        return projectRepository.findByIdAndUser(id, user).orElseThrow(
                 () -> new EntityNotFoundException(
                         "There is no project for user " + username + " by id: " + id
                 )
         );
-        projectRepository.delete(project);
+    }
+
+    private void doesProjectNameDuplicate(User user, String name) {
+        for (Project project : projectRepository.findAllByUser(user)) {
+            String projectName = project.getName().toLowerCase();
+            if (projectName.equals(name.toLowerCase())) {
+                throw new DuplicateNameException("The project with this name already exist");
+            }
+        }
+    }
+
+    private void doesProjectNameRepeated(User user, String name, Long id) {
+        for (Project project : projectRepository.findAllByUser(user)) {
+            String projectName = project.getName().toLowerCase();
+            if (projectName.equals(name.toLowerCase())) {
+                if (!project.getId().equals(id)) {
+                    throw new DuplicateNameException("The project with this name already exist");
+                }
+                break;
+            }
+        }
+    }
+
+    private void doesStatusExist(String requestStatus) {
+        Arrays.stream(Project.Status.values())
+                .filter(status -> status.name().equals(requestStatus))
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "There is no such a status. Check correctness of a written word"
+                ));
     }
 }
