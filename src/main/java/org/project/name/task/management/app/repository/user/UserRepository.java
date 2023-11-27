@@ -1,4 +1,4 @@
-package org.project.name.task.management.app.repository;
+package org.project.name.task.management.app.repository.user;
 
 import java.util.Optional;
 import org.project.name.task.management.app.model.User;

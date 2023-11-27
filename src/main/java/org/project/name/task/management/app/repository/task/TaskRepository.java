@@ -1,4 +1,4 @@
-package org.project.name.task.management.app.repository;
+package org.project.name.task.management.app.repository.task;
 
 import java.util.List;
 import java.util.Optional;

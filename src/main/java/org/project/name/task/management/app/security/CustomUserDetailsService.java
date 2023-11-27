@@ -2,7 +2,7 @@ package org.project.name.task.management.app.security;
 
 import lombok.RequiredArgsConstructor;
 import org.project.name.task.management.app.exception.EntityNotFoundException;
-import org.project.name.task.management.app.repository.UserRepository;
+import org.project.name.task.management.app.repository.user.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

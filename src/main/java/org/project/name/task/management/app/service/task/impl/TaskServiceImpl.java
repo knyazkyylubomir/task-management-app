@@ -12,9 +12,9 @@ import org.project.name.task.management.app.mapper.TaskMapper;
 import org.project.name.task.management.app.model.Project;
 import org.project.name.task.management.app.model.Task;
 import org.project.name.task.management.app.model.User;
-import org.project.name.task.management.app.repository.ProjectRepository;
-import org.project.name.task.management.app.repository.TaskRepository;
-import org.project.name.task.management.app.repository.UserRepository;
+import org.project.name.task.management.app.repository.project.ProjectRepository;
+import org.project.name.task.management.app.repository.task.TaskRepository;
+import org.project.name.task.management.app.repository.user.UserRepository;
 import org.project.name.task.management.app.service.task.TaskService;
 import org.springframework.stereotype.Service;
 
