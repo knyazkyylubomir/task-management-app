@@ -9,7 +9,7 @@ import org.project.name.task.management.app.exception.RegistrationException;
 import org.project.name.task.management.app.exception.UpdateException;
 import org.project.name.task.management.app.mapper.UserMapper;
 import org.project.name.task.management.app.model.User;
-import org.project.name.task.management.app.repository.UserRepository;
+import org.project.name.task.management.app.repository.user.UserRepository;
 import org.project.name.task.management.app.service.user.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
