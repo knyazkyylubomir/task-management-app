@@ -62,7 +62,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     }
 
     @ExceptionHandler(value = UpdateException.class)
-    protected ResponseEntity<Object> handleEntityUpdateException(UpdateException ex) {
+    protected ResponseEntity<Object> handleUpdateException(UpdateException ex) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
         List<String> errors = List.of(ex.getMessage());
         ErrorRespondBody body = errorRespondBodyMapper.createErrorBody(
@@ -71,7 +71,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     }
 
     @ExceptionHandler(value = DuplicateNameException.class)
-    protected ResponseEntity<Object> handleEntityDuplicateNameException(DuplicateNameException ex) {
+    protected ResponseEntity<Object> handleDuplicateNameException(DuplicateNameException ex) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
         List<String> errors = List.of(ex.getMessage());
         ErrorRespondBody body = errorRespondBodyMapper.createErrorBody(
@@ -80,11 +80,33 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     }
 
     @ExceptionHandler(value = ConstraintViolationException.class)
-    protected ResponseEntity<Object> handleEntityDuplicateNameException(
+    protected ResponseEntity<Object> handleConstraintViolationException(
             ConstraintViolationException ex
     ) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
         List<String> errors = List.of("ID must be greater than or equal to 1");
+        ErrorRespondBody body = errorRespondBodyMapper.createErrorBody(
+                LocalDateTime.now(), status, errors);
+        return new ResponseEntity<>(body, status);
+    }
+
+    @ExceptionHandler(value = FileDuplicateException.class)
+    protected ResponseEntity<Object> handleFileDuplicateException(
+            FileDuplicateException ex
+    ) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        List<String> errors = List.of(ex.getMessage());
+        ErrorRespondBody body = errorRespondBodyMapper.createErrorBody(
+                LocalDateTime.now(), status, errors);
+        return new ResponseEntity<>(body, status);
+    }
+
+    @ExceptionHandler(value = MediaTypeException.class)
+    protected ResponseEntity<Object> handleMediaTypeException(
+            MediaTypeException ex
+    ) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        List<String> errors = List.of(ex.getMessage());
         ErrorRespondBody body = errorRespondBodyMapper.createErrorBody(
                 LocalDateTime.now(), status, errors);
         return new ResponseEntity<>(body, status);

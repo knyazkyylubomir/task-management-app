@@ -6,7 +6,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TaskSpecificationProvider implements SpecificationProvider<Comment> {
+public class CommentTaskSpecificationProvider implements SpecificationProvider<Comment> {
     @Override
     public String getKey() {
         return "task";
