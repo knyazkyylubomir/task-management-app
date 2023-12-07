@@ -1,6 +1,7 @@
 package org.project.name.task.management.app.controller;
 
 import com.dropbox.core.DbxException;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -36,6 +37,10 @@ public class AttachmentController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
+    @Operation(
+            summary = "Upload an attachment",
+            description = "This endpoint uploads an attachment to a task"
+    )
     public AttachmentResponseDto uploadAttachment(
             @RequestParam("taskId") Long taskId,
             @RequestParam("file") MultipartFile file)
@@ -44,6 +49,10 @@ public class AttachmentController {
     }
 
     @GetMapping
+    @Operation(
+            summary = "Retrieve attachments",
+            description = "This endpoint retrieve an attachment for a task"
+    )
     public @ResponseBody ResponseEntity<byte[]> downloadAttachment(
             AttachmentSearchParameter searchParameter
     ) {
